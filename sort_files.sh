@@ -25,17 +25,25 @@ files=$(ls -p | grep -v /)
 
 #function to create a directory and move the desired files
 Move_Files (){
+	#if the new directory name already exists, don't create the directory 
 	if [[ -d $1 ]]; then 
-		echo "File exists"
+		echo "Folder exists"
 		exit 1
+	#if the new directory name is a file, don't make the directory 
 	elif [[ -f $1 ]]; then
-		echo "The passed in directory is an existing file"
+		echo "The passed in directory name is an existing file"
 		exit 1
 	else
 		mkdir "$1"
 		for i in "$@"; do
+			#check if the next name is the directory name 
 			if [ "$i" == "$1" ]; then 
 				continue
+			#check if the file to move is the script file
+			elif [ "$i" == "$0" ]; then
+				echo "Can't move the script to new directory"
+				continue
+			#after checks move the file
 			else
 				cp $i $1
 			fi;
